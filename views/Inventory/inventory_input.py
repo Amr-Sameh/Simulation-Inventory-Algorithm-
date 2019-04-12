@@ -1,20 +1,17 @@
 from tkinter import *
-from enum import Enum
 from views.Inventory.tab_view import InventoryOutputTabs
+from enums.enums import InventoryFirstTableEnum
 
 
-class InventoryInputTableKeys(Enum):
-    Demand = "demand"
-    Frequence = "frequence"
 
 class InventoryInput:
     
-     def __init__(self, master):
+     def __init__(self, master ):
         self.master = master
         self.master.title("Simulation - Inventory")
         self.frame = Frame(self.master)
         self.row_count = 0
-        self.input = dict()
+        self.input = list()
         
         
         
@@ -40,22 +37,28 @@ class InventoryInput:
         
      def append_input_row(self):
         self.row_count +=1
-        self.input[InventoryInputTableKeys.Demand] =dict()
-        self.input[InventoryInputTableKeys.Frequence] = dict()
-        self.input[InventoryInputTableKeys.Demand][self.row_count] = Entry(self.frame)
-        self.input[InventoryInputTableKeys.Demand][self.row_count].insert(0,self.row_count-1)
-        self.input[InventoryInputTableKeys.Demand][self.row_count].grid(row=self.row_count,column=0)
-        self.input[InventoryInputTableKeys.Frequence][self.row_count] = Entry(self.frame)
-        self.input[InventoryInputTableKeys.Frequence][self.row_count].grid(row=self.row_count,column=1)
+        entery = Entry(self.frame)
+        entery.insert(0,self.row_count-1)
+        entery.grid(row=self.row_count,column=0)
+        entery = Entry(self.frame)
+        self.input.append(entery)
+        entery.grid(row=self.row_count,column=1)
         
      def show_output(self):
+         data = self.featch_input()
          self.destroy_view()
-         InventoryOutputTabs(self.master)
+         InventoryOutputTabs(self.master , data)
          
          
      def destroy_view(self):
          self.frame.destroy()
          self.simulateBtn.destroy()
          self.add_rowBtn.destroy()
-            
+         
+         
+     def featch_input(self):
+       data = list()
+       for i in self.input:
+          data.append(int(i.get()))
+       return data            
      
