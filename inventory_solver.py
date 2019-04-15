@@ -12,11 +12,12 @@ def calculate_first_table(frequency):
       table["FREQUENCE"].append(frequency_row)
       probability = round(frequency_row / np.sum(frequency),2)
       table["PROBABILITY"].append(probability)
-      cumulative += probability
+      cumulative += round(probability,2)
       table["CUMULATIVEP_ROBABILITY"].append(cumulative)
       interval = (last_interval + 1 , (cumulative * 100) )
       last_interval =  (cumulative * 100)
       table["INTERVAL_OF_RANDOM_NUMBERS"].append(interval)
+      counter += 1
     return table
     
     

@@ -31,7 +31,7 @@ class InventoryOutputTabs:
     def render_table(self , df):
         output_frame = Frame(self.master)
         output_table = Table(output_frame, dataframe=df,
-                                showtoolbar=True, showstatusbar=True)
+                                showtoolbar=True, showstatusbar=True , width=600)
         output_table.show() 
         return output_frame 
         
