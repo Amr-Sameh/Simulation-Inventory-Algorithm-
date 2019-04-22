@@ -3,28 +3,37 @@ from tkinter import ttk
 from enum import Enum
 import pandas as pd 
 from pandastable import Table, TableModel
-from inventory_solver import calculate_first_table
+from inventory_solver import Solver
 
   
 # initialize list of lists 
-data2 = [[1,2,4,5,6],[1,2,3,6,6],[1,2,6,6,3],[1,2,6,6,3],[1,2,6,6,3],[1,2,6,6,3]] 
-  
-table_1_columns = ['Demand', 'Frequancy' , 'Probabilty' ,'cumulative Probabilty' , 'Interval']
+order_quantity = 10
+reorder_point = 5
+amr = -2
 
-df2 = pd.DataFrame(data2, columns = table_1_columns) 
 
 class InventoryOutputTabs:
     
-    def __init__(self, master,data):
+    def __init__(self, master,demand_table , lead_table):
         self.master = master
+        self.solver = Solver()
+        self.demand_table = demand_table
+        self.lead_table = lead_table
         self.master.title("Simulation - Inventory")
         self.tab_manager = ttk.Notebook(self.master)
-        first_table_data = calculate_first_table(data)
-        df = pd.DataFrame(first_table_data)
+        self.demand_table = self.solver.calculate_first_table(self.demand_table , "DEMAND")
+        df = pd.DataFrame(self.demand_table)
         self.output_1_frame = self.render_table(df)
-        self.output_2_frame = self.render_table(df2)
-        self.tab_manager.add(self.output_1_frame, text="output 1")
-        self.tab_manager.add(self.output_2_frame, text="output 2")
+        self.lead_table = self.solver.calculate_first_table( self.lead_table,"LEAD")
+        df = pd.DataFrame(self.lead_table)
+        self.output_2_frame = self.render_table(df)
+        self.output_table_data = self.solver.solver(self.demand_table , self.lead_table , 10)
+        df = pd.DataFrame(self.output_table_data)
+        self.output_3_frame = self.render_table(df)
+        self.tab_manager.add(self.output_1_frame, text="step 1")
+        self.tab_manager.add(self.output_2_frame, text="step 2")
+        self.tab_manager.add(self.output_3_frame, text="step 3")
+       # self.tab_manager.add(self.output_2_frame, text="step 3")
         self.tab_manager.pack(pady=2)
         
         
